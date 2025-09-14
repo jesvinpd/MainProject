@@ -1,32 +1,40 @@
 import pandas as pd
-import os
 import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.animation import FuncAnimation
 
-# Read the CSV file
+# Your training data
+X = np.array([1, 2, 3, 4])
+Y = np.array([2, 3, 5, 7])
+
+# Read linear regression log from parent folder
 df = pd.read_csv("../linear_log.csv")
 
-# Plot both 'm' and 'b' against 'epoch'
-plt.figure(figsize=(8,5))
-plt.plot(df["epoch"], df["m"], marker='o', label="m")
-plt.plot(df["epoch"], df["b"], marker='s', label="b")
+fig, ax = plt.subplots()
 
-# Add labels and title
-plt.title("m and b vs Epoch")
-plt.xlabel("Epoch")
-plt.ylabel("Values")
-plt.legend()
-plt.grid(True)
+def update(frame):
+    ax.clear()
 
-# Show plot
-#plt.show()
+    # Plot original data points
+    ax.scatter(X, Y, color="red", label="Data Points")
 
-# Find a unique filename
-filename = "plot.png"
-i = 1
-while os.path.exists(filename):
-    filename = f"plot_{i}.png"
-    i += 1
+    # Get current linear regression parameters
+    m = df["m"].iloc[frame]
+    b = df["b"].iloc[frame]
 
-# Save plot
-plt.savefig(filename)
-print(f"Saved plot as {filename}")
+    # Plot regression line with current parameters
+    X_line = np.linspace(min(X) - 1, max(X) + 1, 200)
+    Y_pred = m * X_line + b   # linear model: y = m*x + b
+
+    ax.plot(X_line, Y_pred, color="blue", label=f"y = {m:.4f}x + {b:.4f}")
+
+    # Graph labels
+    ax.set_title(f"Linear Regression Fit (Epoch {df['epoch'].iloc[frame]})")
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.legend()
+    ax.grid(True)
+
+ani = FuncAnimation(fig, update, frames=len(df), interval=300, repeat=False)
+plt.show()
+
