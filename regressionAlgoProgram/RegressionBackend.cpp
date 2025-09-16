@@ -126,17 +126,32 @@ static void EmitMainForDef(raw_ostream &OS, const Record *Def)
 // Top-level emitter
 static bool EmitAll(raw_ostream &OS, const RecordKeeper &Records)
 {
-  EmitHeaders(OS);
-
-  EmitLinearRegression(OS);
-  EmitNonLinearRegression(OS);
 
   ArrayRef<const Record *> defs = Records.getAllDerivedDefinitions("RegressionProblem");
   for (const Record *def : defs)
   {
-    EmitMainForDef(OS, def);
+    std::string type = def->getValueAsString("RegressionType").str();
+
+    EmitHeaders(OS);
+
+    if (type == "linear")
+    {
+      EmitLinearRegression(OS); // Only linear
+    }
+    else if (type == "nonlinear")
+    {
+      EmitNonLinearRegression(OS); // Only nonlinear
+    }
+    else
+    {
+      OS << "// Unknown RegressionType: " << type << "\n";
+      continue;
+    }
+
+    EmitMainForDef(OS, def); // main() for this def
     OS << "\n// ----- next generated program -----\n\n";
   }
+
   OS.flush();
   return false;
 }
