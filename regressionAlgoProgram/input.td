@@ -4,6 +4,6 @@ class RegressionProblem {
 }
 
 def Example1 : RegressionProblem {
-  let RegressionType = "linear";
+  let RegressionType = "nonlinear";
   let DataPoints = [[1,2],[2,3],[3,5],[4,7]];
 }

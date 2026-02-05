@@ -10,6 +10,9 @@ lerna-debug.log*
 #python cache
 __pycache__/
 
+# presentation files
+ZpresentationFiles
+
 .vscode
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
@@ -130,3 +133,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+sample/MainProject/
+
+DSLFORONNX/venv/
+DSLFORONNX/__pycache__/
+DSLFORONNX/*.onnx
+DSLFORONNX/*.pt
+DSLFORONNX/gen/model.inc
+DSLFORONNX/driver/onnx_converter
+
