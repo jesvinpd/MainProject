@@ -11,7 +11,7 @@ used commands for version change to 17th version:
 sudo apt update
 sudo apt install wget gnupg lsb-release software-properties-common libzstd-dev
 wget https://apt.llvm.org/llvm.sh
-sudo chmod +x llvm.sh
+sudo chmod +x llvm.shA
 sudo ./llvm.sh 17
 
 After installation(worked for Sample_tests folder's ArithmeticOps.td): 
