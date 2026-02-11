@@ -6,12 +6,13 @@ int main() {
     std::string cmd;
 
     if (std::string(MyModel.framework) == "pytorch") {
-        cmd = "python3 py/export_pytorch.py "
+        cmd = "py ../py/export_pytorch.py "
+        
               + std::string(MyModel.path) + " "
               + std::string(MyModel.output);
     }
     else if (std::string(MyModel.framework) == "tensorflow") {
-        cmd = "python3 py/export_tf.py "
+        cmd = "py ../py/export_tf.py "
               + std::string(MyModel.path) + " "
               + std::string(MyModel.output);
     }
