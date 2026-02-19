@@ -1,0 +1,40 @@
+#!/bin/bash
+
+export PATH="/usr/bin:$PATH"
+
+# Compile LLVM TableGen programs easily
+
+if [ $# -lt 1 ]; then
+  echo "Usage: llvmtg <source1.cpp> [source2.cpp ...] [output]"
+  exit 1
+fi
+
+# Detect if last argument is meant to be output (no .cpp extension)
+ARGS=("$@")
+LAST="${ARGS[-1]}"
+
+if [[ "$LAST" != *.cpp ]]; then
+  OUT="$LAST"
+  unset 'ARGS[-1]'   # remove last arg from sources
+else
+  # Default output: use first source basename
+  BASENAME=$(basename "${ARGS[0]}" .cpp)
+  OUT="$BASENAME"
+fi
+
+# Locate llvm-config (adjust if needed)
+LLVM_CONFIG="/mnt/d/myFiles/mainProject/llvm-project/.build/bin/llvm-config"
+
+if [ ! -x "$LLVM_CONFIG" ]; then
+  echo "Error: llvm-config not found or not executable at $LLVM_CONFIG"
+  exit 1
+fi
+
+CXXFLAGS=$($LLVM_CONFIG --cxxflags)
+LDFLAGS=$($LLVM_CONFIG --ldflags --libs tablegen support)
+
+echo "[llvmtg] Compiling: ${ARGS[*]}"
+echo "[llvmtg] Output: $OUT"
+
+# Compile with clang++
+/mnt/d/myFiles/mainProject/llvm-project/.build/bin/clang-22 "${ARGS[@]}" $CXXFLAGS $LDFLAGS -lpthread -ldl -o "$OUT"
